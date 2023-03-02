@@ -23,6 +23,7 @@ public class AsciiAni {
         private static long total;
         public Loading(long total) {
             AsciiAni.Loading.total = total;
+            run(total);
         }
         public static void main(String[] args) {
             run(total);
@@ -33,7 +34,7 @@ public class AsciiAni {
         
             for (int i = 1; i <= total; i = i + 3) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(70);
                     printProgress(startTime, total, i);
                 } catch (InterruptedException e) {
                 }

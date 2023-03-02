@@ -35,7 +35,17 @@ import java.io.InputStreamReader;
 
 
 public class UI{ 
-    
+    public static int whatChar(String x){
+        // check if ch is a letter
+        char ch = x.charAt(0);
+        if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')){return -2;}
+        // check if ch is a digit
+        int y = Integer.parseInt(x);
+        if (y >= 0 && y <= 255){return 0;}
+        // check if ch is a whitespace
+        if ((ch == ' ') || (ch =='\n') || (ch == '\t')){return -1;}
+        else{return -100;}
+    }
     public static int[] arrownav(String[][] menuItems) throws IOException { 
         Scanner sc = new Scanner(System.in);
         int selInrow = 0;
@@ -45,57 +55,93 @@ public class UI{
         for (int i = 0; i < menuItems.length; i++) {
             h[i] = menuItems[i].length;
         }
-        int[][] k;
+        int[][] k = new int [menuItems.length][menuItems[0].length];
         
-        int a=0,b=0,d=0,e=0,f=0,g=0,l=0,n=0,o=0;
-        for (int i = 0; i < menuItems.length;i++) {
-            a = a + h[i];
-        }
-        while(true) {
+        
+        int a=1,b=0,d=0,e=0,f=0,g=0,l=0,n=0,o=0;
+        for (int i = 0; i < menuItems.length; i++) {
+            for (int j = 0; j < menuItems[i].length; j++) {
+                k[i][j] = a;
+                a++;
+            }
+        }a=0;
+        
+        /*while(true) {
             for (int i = 0; i < menuItems.length; i++) {
                 for(int j = 0; j < menuItems[i].length; j++){
                     System.out.print("   ");
                     if(i == selInrow && j == selIncol){
-                        if(i > 0){
-                        System.out.print((char)27 +"[4m"+menuItems[i][j]+"("+((j+1)%(menuItems[i].length+1)+menuItems[i-1].length)+")"+(char)27+"[0m");
-                        }
-                    }else{
+                        if(j > 0 && j != menuItems[i].length && i > 0 && i != menuItems[i].length){
+                        System.out.print((char)27 +"[4m"+menuItems[i][j]+"("+((j+1)%(menuItems[i].length+1)+menuItems[i].length)+")"+(char)27+"[0m");
+                        }else{
+                        System.out.print((char)27 +"[4m"+menuItems[i][j]+"("+((j+1)%(menuItems[i].length+1))+")"+(char)27+"[0m");
+                        }    
+                    }
+                    else{
                         System.out.print(menuItems[i][j]);
                     }
                 }
                 System.out.println(" ");
             }
-            
-            // Read user input
-            char c = sc.next().charAt(0);
-            int ch = java.awt.event.KeyEvent.getExtendedKeyCodeForChar(c);
-    
-            // Handle arrow keys
-            if (ch == 65) { // Up arrow
-                if (selIncol > 0) {
-                    selIncol--;
+            */
+            while (true) {
+                    for (int i = 0; i < menuItems.length; i++) {
+                        for (int j = 0; j < menuItems[i].length; j++) {
+                            System.out.print("   ");
+                            if (i == selInrow && j == selIncol) {                                
+                                System.out.print((char)27 +"[4m"+menuItems[i][j]+"("+(k[i][j])+")"+(char)27+"[0m");
+                            } else {
+                                System.out.print(menuItems[i][j]);
+                            }
+                        }
+                        System.out.println();
+                    }
+                
+                
+                
+                // Read user input
+                String c = sc.next();
+                if(whatChar(c) == -2){int ch = java.awt.event.KeyEvent.getExtendedKeyCodeForChar(c.charAt(0));
+                // Handle arrow keys
+                if (ch == 65) { // Up arrow
+                    if (selIncol > 0) {
+                        selIncol--;
+                    }
+                } else if (ch == 68) { // Down arrow
+                    if (selIncol < menuItems[0].length - 1) {
+                        selIncol++;
+                    }
+                } else if (ch == 87) { // Left arrow
+                    if (selInrow > 0) {
+                        selInrow--;
+                    }
+                } else if (ch == 83) { // Right arrow
+                    if (selInrow < menuItems.length - 1) {
+                        selInrow++;
+                    }
+                }else if (ch == 90) { // Enter key
+                    break;
                 }
-            } else if (ch == 68) { // Down arrow
-                if (selIncol < menuItems[0].length - 1) {
-                    selIncol++;
+            }
+                else if (whatChar(c) == 0){ 
+                    b=Integer.parseInt(c);
+                    for (int i = 0;i<k.length; i++) {
+                        for (int j = 0; j < k[i].length; j++) {
+                            if(k[i][j] == b){
+                                selInrow = i;
+                                selIncol = j;
+                            }
+                        }
+                    }
                 }
-            } else if (ch == 87) { // Left arrow
-                if (selInrow > 0) {
-                    selInrow--;
-                }
-            } else if (ch == 83) { // Right arrow
-                if (selInrow < menuItems.length - 1) {
-                    selInrow++;
-                }
-            } else if (ch == 10) { // Enter key
-                break;
             }
             
+          int[] x = {selInrow,selIncol};
+        return x;  
         }
     
-        int[] x = {selInrow,selIncol};
-        return x;
-    }
+        
+    
     /*public static void main(String[] args){
         //Creating the Frame
         JFrame frame = new JFrame("Chat Frame");
@@ -542,15 +588,15 @@ public class UI{
         int var3 = 0;
         int[] var4 = {0,0};
         int[] quit = {0,3};
-        String[][] menu = {{"          Calculator       ","    OriEdit 1.5.0"," Login Info"},
+        String[][] menu = {{"          Calculator       ","OriEdit 1.5.0","  Login Info"},
                            {"    OpenSource Deceleration   ","    Credits"," Software & Games"},
-                           {"Sorting Algorithms (Coming Soon)","Quit OriUI","      More      "}};
+                           {"Sorting Algorithms (Coming Soon)","Quit OriUI","       More      "}};
         char[][] menuchars = {{'c','e','l'},
                               {'o','d','g'},
                               {'s','q','m'}};
         while(var4!=quit){
-            var4 = arrownav(menu);
-        }
+            
+        
             while(var3 < 48) {
                 System.out.print("-");
                 Thread.sleep(50L);
@@ -559,6 +605,7 @@ public class UI{
 
             System.out.println("\n");
             System.out.println(var2.getTime() + " (is right for the second of successful login)");
+            var4 = arrownav(menu);
             char choice = menuchars[var4[0]][var4[1]];
             switch(choice) {
             case 'e':
@@ -612,6 +659,7 @@ public class UI{
                 System.out.println();
                 
             }
+        }
         if (var4 == quit) {
             var1.close();
             AsciiAni e = new AsciiAni(); 
@@ -619,6 +667,7 @@ public class UI{
             System.out.println("Goodbye!");
             System.exit(0);
         }
+
 
     }
     
@@ -711,45 +760,45 @@ public class UI{
             }
             boolean leave = false;
             while(!leave){
-                System.out.println("You Have <HP> HP And "+"ABPoints.\nWhat Are You Gonna Do?\n(0)Try To Escape(40% Failing)\n(1)Slap Him Basic\n(2)Choose \n(3)Choose Between Your Items\n(4)Defend");
+                System.out.println("You Have "+hp+" HP And "+"ABPoints.\nWhat Are You Gonna Do?\n(0)Try To Escape(40% Failing)\n(1)Slap Him Basic\n(2)Choose \n(3)Choose Between Your Items\n(4)Defend");
             }
         }
         private static void mgc() throws InterruptedException {
             System.out.println("Apply FullScreen To The Command Line For Better Gameplay.");
-            Thread.sleep(2000);
-            System.out.println("""
-                                                                                                                                           \s
-                                                              ...                                                                        \s
-                                        ^^^^^^^^:            ^~~~                                                        -.              \s
-                                       ~!      .~~.        :!^ !:                      .7                               . .              \s
-                                      .7         .!^     .~~   7                 .:^^^^77            .:^.            .^!^ :              \s
-                                      7:           :7.  :7.   :!              .^~^:.   7   .::^~7JY5B&&#^          :!!:  :7              \s
-                                     :7     .       .!^:7     ~~          .^~^^.     ^5YY5G#&&@@@@@@@@@G         ~?~.    :!              \s
-                                     7:    :7!        :~.     ~^       .^~:.     .^?P&@@@@@@@@@@@@@@@@@?      .^?7.      :!              \s
-                                    :7    :7 ^!          ?!   !^     .!!^    ^^^~?B@@@@@@@@@@@@@@@@@@@Y     :~^.      .  :!              \s
-                                    !^    7.  ^~^^:.. .^~7~   ?~  .^7J!  :::^^^^P@@@@@@@@&&########B5~    ~7:        ~7~ :!              \s
-                                   ^!    ~~      .::^^^. ~~   ^7~!?7  .:^^^^:: J@@@&Y7~~^::........       .^!.   .:.!^ ? :!              \s
-                                  ~!    ~~               ^^:^!!~~^    |~^~.    G@@B^                        .!:   7!   7 :!              \s
-                               .^~:    ~!               ^~~:~~:.  !^     ~~   !@@@!                           7:   7:  ? :!              \s
-                           .:^~^. ^~~~!^ .           .~~:. 7~  ....     ^!:   7@@@G?^.          ....          .7.   ~!.7 :!              \s
-                          ~^:.    :^^^^:^:7.        !~.       ^^^^^::...      7B@@@@&#GPPPPPPPGB####G^         :7    ~Y^ :!              \s
-                         ^~~~~!7?!!7!!!~^!7.        7^            ....::::^^^~^ ?#@@@@@@@@@@@@@@@@@@@J          ^!   :G  :!              \s
-                           ^^^^^^:^J....~~           ^77^.   ^~!!~~J!^::.:.      .?B@@@@@@@@@@@@@@@@@J           ^!  .~  :!              \s
-                           .     7.         ..        ^~^^^^~7~::^^^!:              ^7YPB&&&@@@@@@@@&!            ^!   ..~?.             \s
-                                 7:         !J.  ::    .      :                          .:::^^^^^^::              ~~^~^^!?~~            \s
-                                 ^~:        !~7. 7:  Y      :JY7     @@         .^^:                               ^J! ^^:  ~!           \s
-                    .:::^^^~~~!!?!^:^^^^   :! :!.7  ??    .5^    Y!       .7!!!!  .^^!J                          .7: :      ^!           \s
-                    ^~~~!~^^^^::.....     ^!   !J:   5:  ^Y:      .P @@   Y!                                     ^!       .~!            \s
-                                         ~~    .Y    !Y  ^G        5 @@   7?:.       7:   .::::.  J  :^^         .7:..::^~~:             \s
-                                        .!      ^     5 ~5         P7@@    ^7?JY7    :5..Y!~.  ~J !G?7^!Y.        .^^::..                \s
-                                                       JG~         ~Y@@    ?!~~~^:    Y~ ?7^^  ^J B7.   !Y                               \s
-                                                       .:        J!  @@  J~^          7~  :^^^^^: ~     ^5                               \s
-                                                         K@O9!//1    @@                           .!    .!                               \s
-                                                                       __                                                                \s
-                                                                      /  \\                                                              \s
-                                                                     |   |                                                               \s
-                                                       Created By The \\__/hanuna Company 2022                                           \s""".indent(2));
-            System.out.println("");
+            AsciiAni a = new AsciiAni();
+            a.new Loading(200);
+            String x = "                                                                                                                 \n"
+            +"                                                  ...                                                                      \n"
+            +"                          ^^^^^^^^:            ^~~~                                                        -.              \n"
+            +"                         ~!      .~~.        :!^ !:                      .7                               . .              \n"
+            +"                        .7         .!^     .~~   7                 .:^^^^77            .:^.            .^!^ :              \n"
+            +"                        7:           :7.  :7.   :!              .^~^:.   7   .::^~7JY5B&&#^          :!!:  :7              \n"
+            +"                       :7     .       .!^:7     ~~          .^~^^.     ^5YY5G#&&@@@@@@@@@G         ~?~.    :!              \n"
+            +"                       7:    :7!        :~.     ~^       .^~:.     .^?P&@@@@@@@@@@@@@@@@@?      .^?7.      :!              \n"
+            +"                      :7    :7 ^!          ?!   !^     .!!^    ^^^~?B@@@@@@@@@@@@@@@@@@@Y     :~^.      .  :!              \n"
+            +"                      !^    7.  ^~^^:.. .^~7~   ?~  .^7J!  :::^^^^P@@@@@@@@&&########B5~    ~7:        ~7~ :!              \n"
+            +"                     ^!    ~~      .::^^^. ~~   ^7~!?7  .:^^^^:: J@@@&Y7~~^::........       .^!.   .:.!^ ? :!              \n"
+            +"                    ~!    ~~               ^^:^!!~~^    |~^~.    G@@B^                        .!:   7!   7 :!              \n"
+            +"                 .^~:    ~!               ^~~:~~:.  !^     ~~   !@@@!                           7:   7:  ? :!              \n"
+            +"             .:^~^. ^~~~!^ .           .~~:. 7~  ....     ^!:   7@@@G?^.          ....          .7.   ~!.7 :!              \n"
+            +"            ~^:.    :^^^^:^:7.        !~.       ^^^^^::...      7B@@@@&#GPPPPPPPGB####G^         :7    ~Y^ :!              \n"
+            +"           ^~~~~!7?!!7!!!~^!7.        7^            ....::::^^^~^ ?#@@@@@@@@@@@@@@@@@@@J          ^!   :G  :!              \n"
+            +"             ^^^^^^:^J....~~           ^77^.   ^~!!~~J!^::.:.      .?B@@@@@@@@@@@@@@@@@J           ^!  .~  :!              \n"
+            +"             .     7.         ..        ^~^^^^~7~::^^^!:              ^7YPB&&&@@@@@@@@&!            ^!   ..~?.             \n"
+            +"                   7:         !J.  ::    .      :                          .:::^^^^^^::              ~~^~^^!?~~            \n"
+            +"                   ^~:        !~7. 7:  Y      :JY7     @@         .^^:                               ^J! ^^:  ~!           \n"
+            +"      .:::^^^~~~!!?!^:^^^^   :! :!.7  ??    .5^    Y!       .7!!!!  .^^!J                          .7: :      ^!           \n"
+            +"      ^~~~!~^^^^::.....     ^!   !J:   5:  ^Y:      .P @@   Y!                                     ^!       .~!            \n"
+            +"                           ~~    .Y    !Y  ^G        5 @@   7?:.       7:   .::::.  J  :^^         .7:..::^~~:             \n"
+            +"                          .!      ^     5 ~5         P7@@    ^7?JY7    :5..Y!~.  ~J !G?7^!Y.        .^^::..                \n"
+            +"                                         JG~         ~Y@@    ?!~~~^:    Y~ ?7^^  ^J B7.   !Y                               \n"
+            +"                                         .:        J!  @@  J~^          7~  :^^^^^: ~     ^5                               \n"
+            +"                                           K@O9!//1    @@                           .!    .!                               \n"
+            +"                                                         __                                                                \n"
+            +"                                                        /  \\                                                              \n"
+            +"                                                       |   |                                                               \n"
+            +"                                         Created By The \\__/hanuna Company 2022                                           \n";
+            typewriter(x, 15);
         }
         public static void run() throws InterruptedException {
             mgc();
