@@ -8,7 +8,7 @@ import javax.swing.text.*;
 
 import a.AsciiAni;
 import a.AsciiAni.Loading;
-import chatbot.java.src.main.java.com.google.code.chatterbotapi.*;
+//import chatbot.java.src.main.java.com.google.code.chatterbotapi.*;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -241,7 +241,7 @@ public class UI{
         int[] x = {selInrow,selIncol};
         return x;
     }*/
-    public static void chat()throws Exception {
+    /*public static void chat()throws Exception {
         Scanner sc = new Scanner(System.in);
         ChatterBotFactory factory = new ChatterBotFactory();
         ChatterBot bot1 = factory.create(ChatterBotType.CLEVERBOT);
@@ -262,6 +262,7 @@ public class UI{
         }
         System.out.println(name+": Bye Bye!");
     }
+    */
     static class PrintWriterStream { //super hacky way of combining a PrintWriter and a PrintStream
         
         private PrintWriter w;
@@ -643,7 +644,7 @@ public class UI{
                         break;
                     case 2:
                         try {
-                            chat();
+                            
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -655,7 +656,7 @@ public class UI{
                         break;
 
                 }
-            case 'd':
+            case 'd': 
                 System.out.println();
                 
             }
