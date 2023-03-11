@@ -511,9 +511,7 @@ public class UI{
 
         Scanner var2 = new Scanner(System.in);
         usernames[0] = "orihanuna";
-        usernames[1] = "urmom.gae_10";
         passwords[0] = "ori10hanuna";
-        passwords[1] = "noU4567654";
         double[] z = new double[2];
         z[0]=0;z[1]=0;
         System.out.println("--------------ORI-OS-VERSION-0.1----------------");
